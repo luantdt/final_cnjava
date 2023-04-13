@@ -1,4 +1,4 @@
-package com.midterm.SpringCommerce.services;
+package com.finalProject.foodStore.services;
 
 import java.nio.file.Path;
 import java.util.stream.Stream;
