@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,6 +30,8 @@ public class Category {
 	private int id;
 	
 	@Column(length = 255)
+	@NotEmpty(message = "name of category is not empty")
+	@NotNull(message = "name of category is not null")
 	private String name;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
