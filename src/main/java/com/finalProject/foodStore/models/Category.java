@@ -1,5 +1,7 @@
 package com.finalProject.foodStore.models;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -38,5 +40,5 @@ public class Category {
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@JsonManagedReference
-	private Food food;
+	private List<Food> food;
 }

@@ -1,13 +1,18 @@
 package com.finalProject.foodStore.models;
 
+import java.util.Collection;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.CascadeType;
+import com.finalProject.foodStore.jwt.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,17 +23,17 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Table
-@Entity(name = "user")
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class User {
+@AllArgsConstructor
+@Entity
+@Table(name = "user")
+public class User implements UserDetails{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -39,7 +44,6 @@ public class User {
 	private String email;
 	
 	@Column(length = 10)
-	@Max(value = 10, message = "phone is no more than 10 characters")
 	@Min(value = 9, message = "phone is no less than 9 characters")
 	@NotEmpty(message = "phone of account is not empty")
 	@NotNull(message = "phone of account is not null")
@@ -57,13 +61,53 @@ public class User {
 	@NotNull(message = "password of account is not null")
 	private String password;
 	
-	private Boolean status = true;
-	private String role;
+	@Column(columnDefinition = "boolean default true")
+	private Boolean status;
 	
-	@JsonIgnore
-	@JsonManagedReference
-	@OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
-	@EqualsAndHashCode.Exclude
-    @ToString.Exclude
-	private List<OrderFood> orderFood;
+	@Enumerated(EnumType.STRING)
+	private Role role;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Token> tokens;
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return List.of(new SimpleGrantedAuthority(role.name()));
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return email;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}		
 }
