@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 17, 2023 lúc 02:19 PM
+-- Thời gian đã tạo: Th4 19, 2023 lúc 02:58 PM
 -- Phiên bản máy phục vụ: 10.4.24-MariaDB
 -- Phiên bản PHP: 8.1.6
 
@@ -78,6 +78,23 @@ CREATE TABLE `category` (
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `category_seq`
+--
+
+CREATE TABLE `category_seq` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Đang đổ dữ liệu cho bảng `category_seq`
+--
+
+INSERT INTO `category_seq` (`next_val`) VALUES
+(1);
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `food`
 --
 
@@ -95,6 +112,23 @@ CREATE TABLE `food` (
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `endSale` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `food_seq`
+--
+
+CREATE TABLE `food_seq` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Đang đổ dữ liệu cho bảng `food_seq`
+--
+
+INSERT INTO `food_seq` (`next_val`) VALUES
+(1);
 
 -- --------------------------------------------------------
 
@@ -124,8 +158,26 @@ CREATE TABLE `orderfood` (
   `shippingFee` float NOT NULL DEFAULT 25,
   `status` varchar(10) NOT NULL,
   `note` varchar(255) NOT NULL,
-  `total` float NOT NULL
+  `total` float NOT NULL,
+  `user` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `orderfood_seq`
+--
+
+CREATE TABLE `orderfood_seq` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Đang đổ dữ liệu cho bảng `orderfood_seq`
+--
+
+INSERT INTO `orderfood_seq` (`next_val`) VALUES
+(1);
 
 -- --------------------------------------------------------
 
@@ -171,6 +223,46 @@ CREATE TABLE `tag` (
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `token`
+--
+
+CREATE TABLE `token` (
+  `id` int(11) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `tokenType` varchar(255) NOT NULL DEFAULT 'BEARER',
+  `revoked` tinyint(1) NOT NULL,
+  `expired` tinyint(1) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Đang đổ dữ liệu cho bảng `token`
+--
+
+INSERT INTO `token` (`id`, `token`, `tokenType`, `revoked`, `expired`, `user_id`) VALUES
+(1, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2dWx1YW4xMjNAZ21haWwuY29tIiwiaWF0IjoxNjgxODk3NDIzLCJleHAiOjE2ODE4OTc0ODN9.UWe81IkZ1kMHqHO8YKAf1Ir4j_1AorjTPFvmL4K-qKk', 'BEARER', 1, 1, 252),
+(2, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2dWx1YW4xMjNAZ21haWwuY29tIiwiaWF0IjoxNjgxODk3OTMxLCJleHAiOjE2ODE4OTc5OTF9.2dQzFfo-rkFq9reKab8dyJoSve6uWGRiK6PodGupmHE', 'BEARER', 0, 0, 252);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `token_seq`
+--
+
+CREATE TABLE `token_seq` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Đang đổ dữ liệu cho bảng `token_seq`
+--
+
+INSERT INTO `token_seq` (`next_val`) VALUES
+(101);
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `user`
 --
 
@@ -184,6 +276,30 @@ CREATE TABLE `user` (
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `role` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Đang đổ dữ liệu cho bảng `user`
+--
+
+INSERT INTO `user` (`id`, `email`, `phone`, `name`, `address`, `password`, `status`, `role`) VALUES
+(252, 'vuluan123@gmail.com', '0123456789', 'Vu Luan', '123 đường 123', '$2a$10$JnFcbSkEjtF37ePvAOdFP.Pfjs63CrZvyDtAEVeF3KLeghT0XVtiS', 1, 'USER');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `user_seq`
+--
+
+CREATE TABLE `user_seq` (
+  `next_val` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Đang đổ dữ liệu cho bảng `user_seq`
+--
+
+INSERT INTO `user_seq` (`next_val`) VALUES
+(351);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -234,7 +350,8 @@ ALTER TABLE `news`
 --
 ALTER TABLE `orderfood`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `userId` (`userId`);
+  ADD KEY `userId` (`userId`),
+  ADD KEY `FKky025lm1011kw4wu8wpwnrpx0` (`user`);
 
 --
 -- Chỉ mục cho bảng `orderunit`
@@ -258,6 +375,14 @@ ALTER TABLE `payment`
 ALTER TABLE `tag`
   ADD KEY `newId` (`newId`),
   ADD KEY `categoryId` (`categoryId`);
+
+--
+-- Chỉ mục cho bảng `token`
+--
+ALTER TABLE `token`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `token` (`token`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Chỉ mục cho bảng `user`
@@ -325,10 +450,16 @@ ALTER TABLE `payment`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT cho bảng `token`
+--
+ALTER TABLE `token`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=253;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
@@ -357,6 +488,7 @@ ALTER TABLE `news`
 -- Các ràng buộc cho bảng `orderfood`
 --
 ALTER TABLE `orderfood`
+  ADD CONSTRAINT `FKky025lm1011kw4wu8wpwnrpx0` FOREIGN KEY (`user`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `orderfood_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`);
 
 --
@@ -379,6 +511,12 @@ ALTER TABLE `payment`
 ALTER TABLE `tag`
   ADD CONSTRAINT `tag_ibfk_1` FOREIGN KEY (`newId`) REFERENCES `news` (`id`),
   ADD CONSTRAINT `tag_ibfk_2` FOREIGN KEY (`categoryId`) REFERENCES `category` (`id`);
+
+--
+-- Các ràng buộc cho bảng `token`
+--
+ALTER TABLE `token`
+  ADD CONSTRAINT `token_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
