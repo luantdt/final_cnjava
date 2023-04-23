@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface FoodRepository extends JpaRepository<Food, Integer>{
+public interface ProductRepository extends JpaRepository<Food, Integer>{
 
-    @Query("select p from food p")
-    List<Food> getAllFoods();
+    @Query("select p from food p where p.status = 1")
+    List<Food> getAllProducts();
 }

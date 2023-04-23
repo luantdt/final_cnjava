@@ -1,35 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th = "https://www.thymeleaf.org/">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
-
-	<!-- title -->
-	<title>Fruitkha - Slider Version</title>
-
-	<!-- favicon -->
-	<link rel="shortcut icon" type="image/png" th:href="@{/img/favicon.png}">
-	<!-- google font -->
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-	<!-- fontawesome -->
-	<link rel="stylesheet" th:href="@{/css/all.min.css}">
-	<!-- bootstrap -->
-	<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
-	<!-- owl carousel -->
-	<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
-	<!-- magnific popup -->
-	<link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
-	<!-- animate css -->
-	<link rel="stylesheet" th:href="@{/css/animate.css}">
-	<!-- mean menu css -->
-	<link rel="stylesheet" th:href="@{/css/meanmenu.min.css}">
-	<!-- main style -->
-	<link rel="stylesheet" th:href="@{/css/main.css}">
-	<!-- responsive -->
-	<link rel="stylesheet" href="assets/css/responsive.css">
+<head th:replace="client/fragments.html :: head">
 
 </head>
 <body>
@@ -138,6 +109,7 @@
 					<div class="col-md-12 col-lg-7 offset-lg-1 offset-xl-0">
 						<div class="hero-text">
 							<div class="hero-text-tablecell">
+
 								<p class="subtitle">Fresh & Organic</p>
 								<h1>Delicious Seasonal Fruits</h1>
 								<div class="hero-btns">
@@ -237,47 +209,29 @@
 
 	<!-- product section -->
 	<div class="product-section mt-150 mb-150">
-		<div class="container">
+		<div class="container" th:each="category : ${categories}" >
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
-					<div class="section-title">	
-						<h3><span class="orange-text">Our</span> Products</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
+					<div class="section-title">
+						<h3><span th:text="${category.name}" class="orange-text"></span> </h3>
+<!--						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>-->
 					</div>
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="col-lg-4 col-md-6 text-center">
+				<div class="col-lg-4 col-md-6 text-center" th:each="product : ${products}"
+						th:if="${product.category.id == category.id}">
 					<div class="single-product-item">
 						<div class="product-image">
-							<a href="single-product.html"><img src="/img/products/product-img-1.jpg" alt=""></a>
+							<a th:href="@{/find-product/{id}(id = ${product.id})}"><img th:src="@{/image/{imgPro}(imgPro=${product.image})}" alt=""></a>
 						</div>
-						<h3>Strawberry</h3>
-						<p class="product-price"><span>Per Kg</span> 85$ </p>
+						<h3 th:text="${product.name}"></h3>
+						<p th:text="${product.price} + '$'" class="product-price"><span>Per Kg</span> </p>
 						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
 					</div>
 				</div>
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="/img/products/product-img-2.jpg" alt=""></a>
-						</div>
-						<h3>Berry</h3>
-						<p class="product-price"><span>Per Kg</span> 70$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="single-product.html"><img src="/img/products/product-img-3.jpg" alt=""></a>
-						</div>
-						<h3>Lemon</h3>
-						<p class="product-price"><span>Per Kg</span> 35$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
+
 			</div>
 		</div>
 	</div>
@@ -314,52 +268,51 @@
     </section>
     <!-- end cart banner section -->
 
-	<!-- testimonail-section -->
-	<div class="testimonail-section mt-150 mb-150">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-10 offset-lg-1 text-center">
-					<div class="testimonial-sliders">
-						<div class="single-testimonial-slider">
-							<div class="client-avater">
-								<img src="/img/avaters/avatar1.png" alt="">
-							</div>
-							<div class="client-meta">
-								<h3>Saira Hakim <span>Local shop owner</span></h3>
-								<p class="testimonial-body">
-									" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
-								</p>
-								<div class="last-icon">
-									<i class="fas fa-quote-right"></i>
-								</div>
+<!-- testimonail-section -->
+<div class="testimonail-section mt-150 mb-150">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-10 offset-lg-1 text-center">
+				<div class="testimonial-sliders">
+					<div class="single-testimonial-slider">
+						<div class="client-avater">
+							<img src="/img/avaters/avatar1.png" alt="">
+						</div>
+						<div class="client-meta">
+							<h3>Saira Hakim <span>Local shop owner</span></h3>
+							<p class="testimonial-body">
+								" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
+							</p>
+							<div class="last-icon">
+								<i class="fas fa-quote-right"></i>
 							</div>
 						</div>
-						<div class="single-testimonial-slider">
-							<div class="client-avater">
-								<img src="/img/avaters/avatar2.png" alt="">
-							</div>
-							<div class="client-meta">
-								<h3>David Niph <span>Local shop owner</span></h3>
-								<p class="testimonial-body">
-									" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
-								</p>
-								<div class="last-icon">
-									<i class="fas fa-quote-right"></i>
-								</div>
+					</div>
+					<div class="single-testimonial-slider">
+						<div class="client-avater">
+							<img src="/img/avaters/avatar2.png" alt="">
+						</div>
+						<div class="client-meta">
+							<h3>David Niph <span>Local shop owner</span></h3>
+							<p class="testimonial-body">
+								" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
+							</p>
+							<div class="last-icon">
+								<i class="fas fa-quote-right"></i>
 							</div>
 						</div>
-						<div class="single-testimonial-slider">
-							<div class="client-avater">
-								<img src="/img/avaters/avatar3.png" alt="">
-							</div>
-							<div class="client-meta">
-								<h3>Jacob Sikim <span>Local shop owner</span></h3>
-								<p class="testimonial-body">
-									" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
-								</p>
-								<div class="last-icon">
-									<i class="fas fa-quote-right"></i>
-								</div>
+					</div>
+					<div class="single-testimonial-slider">
+						<div class="client-avater">
+							<img src="/img/avaters/avatar3.png" alt="">
+						</div>
+						<div class="client-meta">
+							<h3>Jacob Sikim <span>Local shop owner</span></h3>
+							<p class="testimonial-body">
+								" Sed ut perspiciatis unde omnis iste natus error veritatis et  quasi architecto beatae vitae dict eaque ipsa quae ab illo inventore Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium "
+							</p>
+							<div class="last-icon">
+								<i class="fas fa-quote-right"></i>
 							</div>
 						</div>
 					</div>
@@ -367,7 +320,8 @@
 			</div>
 		</div>
 	</div>
-	<!-- end testimonail-section -->
+</div>
+<!-- end testimonail-section -->
 	
 	<!-- advertisement section -->
 	<div class="abt-section mb-150">
@@ -402,71 +356,71 @@
     </section>
 	<!-- end shop banner -->
 
-	<!-- latest news -->
-	<div class="latest-news pt-150 pb-150">
-		<div class="container">
+<!-- latest news -->
+<div class="latest-news pt-150 pb-150">
+	<div class="container">
 
-			<div class="row">
-				<div class="col-lg-8 offset-lg-2 text-center">
-					<div class="section-title">	
-						<h3><span class="orange-text">Our</span> News</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-lg-4 col-md-6">
-					<div class="single-latest-news">
-						<a href="single-news.html"><div class="latest-news-bg news-bg-1"></div></a>
-						<div class="news-text-box">
-							<h3><a href="single-news.html">You will vainly look for fruit on it in autumn.</a></h3>
-							<p class="blog-meta">
-								<span class="author"><i class="fas fa-user"></i> Admin</span>
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
-							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.</p>
-							<a href="single-news.html" class="read-more-btn">read more <i class="fas fa-angle-right"></i></a>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6">
-					<div class="single-latest-news">
-						<a href="single-news.html"><div class="latest-news-bg news-bg-2"></div></a>
-						<div class="news-text-box">
-							<h3><a href="single-news.html">A man's worth has its season, like tomato.</a></h3>
-							<p class="blog-meta">
-								<span class="author"><i class="fas fa-user"></i> Admin</span>
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
-							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.</p>
-							<a href="single-news.html" class="read-more-btn">read more <i class="fas fa-angle-right"></i></a>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0">
-					<div class="single-latest-news">
-						<a href="single-news.html"><div class="latest-news-bg news-bg-3"></div></a>
-						<div class="news-text-box">
-							<h3><a href="single-news.html">Good thoughts bear good fresh juicy fruit.</a></h3>
-							<p class="blog-meta">
-								<span class="author"><i class="fas fa-user"></i> Admin</span>
-								<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
-							</p>
-							<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.</p>
-							<a href="single-news.html" class="read-more-btn">read more <i class="fas fa-angle-right"></i></a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-12 text-center">
-					<a href="news.html" class="boxed-btn">More News</a>
+		<div class="row">
+			<div class="col-lg-8 offset-lg-2 text-center">
+				<div class="section-title">
+					<h3><span class="orange-text">Our</span> News</h3>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
 				</div>
 			</div>
 		</div>
+
+		<div class="row">
+			<div class="col-lg-4 col-md-6">
+				<div class="single-latest-news">
+					<a href="single-news.html"><div class="latest-news-bg news-bg-1"></div></a>
+					<div class="news-text-box">
+						<h3><a href="single-news.html">You will vainly look for fruit on it in autumn.</a></h3>
+						<p class="blog-meta">
+							<span class="author"><i class="fas fa-user"></i> Admin</span>
+							<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
+						</p>
+						<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.</p>
+						<a href="single-news.html" class="read-more-btn">read more <i class="fas fa-angle-right"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 col-md-6">
+				<div class="single-latest-news">
+					<a href="single-news.html"><div class="latest-news-bg news-bg-2"></div></a>
+					<div class="news-text-box">
+						<h3><a href="single-news.html">A man's worth has its season, like tomato.</a></h3>
+						<p class="blog-meta">
+							<span class="author"><i class="fas fa-user"></i> Admin</span>
+							<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
+						</p>
+						<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.</p>
+						<a href="single-news.html" class="read-more-btn">read more <i class="fas fa-angle-right"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0">
+				<div class="single-latest-news">
+					<a href="single-news.html"><div class="latest-news-bg news-bg-3"></div></a>
+					<div class="news-text-box">
+						<h3><a href="single-news.html">Good thoughts bear good fresh juicy fruit.</a></h3>
+						<p class="blog-meta">
+							<span class="author"><i class="fas fa-user"></i> Admin</span>
+							<span class="date"><i class="fas fa-calendar"></i> 27 December, 2019</span>
+						</p>
+						<p class="excerpt">Vivamus lacus enim, pulvinar vel nulla sed, scelerisque rhoncus nisi. Praesent vitae mattis nunc, egestas viverra eros.</p>
+						<a href="single-news.html" class="read-more-btn">read more <i class="fas fa-angle-right"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<a href="news.html" class="boxed-btn">More News</a>
+			</div>
+		</div>
 	</div>
-	<!-- end latest news -->
+</div>
+<!-- end latest news -->
 
 	<!-- logo carousel -->
 	<div class="logo-carousel-section">
@@ -568,26 +522,7 @@
 	</div>
 	<!-- end copyright -->
 	
-	<!-- jquery -->
-	<script th:src="@{/js/jquery-1.11.3.min.js}"></script>
-	<!-- bootstrap -->
-	<script th:src="@{/js/bootstrap.min.js}"></script>
-	<!-- count down -->
-	<script th:src="@{/js/jquery.countdown.js}"></script>
-	<!-- isotope -->
-	<script th:src="@{/js/jquery.isotope-3.0.6.min.js}"></script>
-	<!-- waypoints -->
-	<script th:src="@{/js/waypoints.js}"></script>
-	<!-- owl carousel -->
-	<script th:src="@{/js/owl.carousel.min.js}"></script>
-	<!-- magnific popup -->
-	<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
-	<!-- mean menu -->
-	<script th:src="@{/js/jquery.meanmenu.min.js}"></script>
-	<!-- sticker js -->
-	<script th:src="@{/js/sticker.js}"></script>
-	<!-- main js -->
-	<script th:src="@{/js/main.js}"></script>
+<th:block th:replace="/client/fragments.html :: script"></th:block>
 
 </body>
 </html>

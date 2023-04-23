@@ -1,37 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th = "https://www.thymeleaf.org/">
-<head >
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
-
-  <!-- title -->
-  <title>Fruitkha - Slider Version</title>
-
-  <!-- favicon -->
-  <link rel="shortcut icon" type="image/png" th:href="@{/img/favicon.png}">
-  <!-- google font -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
-  <!-- fontawesome -->
-  <link rel="stylesheet" th:href="@{/css/all.min.css}">
-  <!-- bootstrap -->
-  <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
-  <!-- owl carousel -->
-  <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
-  <!-- magnific popup -->
-  <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
-  <!-- animate css -->
-  <link rel="stylesheet" th:href="@{/css/animate.css}">
-  <!-- mean menu css -->
-  <link rel="stylesheet" th:href="@{/css/meanmenu.min.css}">
-  <!-- main style -->
-  <link rel="stylesheet" th:href="@{/css/main.css}">
-  <!-- responsive -->
-  <link rel="stylesheet" href="assets/css/responsive.css">
-
-</head>
+<head th:replace="client/fragments.html :: head">
 <body>
 
 <!--PreLoader-->
@@ -161,14 +130,14 @@
       </div>
     </div>
 
-    <div class="row product-lists" th:each="food : ${foods}">
-      <div class="col-lg-4 col-md-6 text-center">
+    <div class="row product-lists" >
+      <div class="col-lg-4 col-md-6 text-center" th:each="product : ${products}">
         <div class="single-product-item">
           <div class="product-image">
-            <a href="single-product.html"><img src="/img/products/product-img-1.jpg" alt=""></a>
+            <a th:href="@{/find-product/{id}(id = ${product.id})}"><img th:src="@{/image/{imgPro}(imgPro=${product.image})}" alt=""></a>
           </div>
-          <h3 th:text="${food.name}"></h3>
-          <p th:text="${food.price} + '$'" class="product-price"><span>Per Kg</span> </p>
+          <h3 th:text="${product.name}"></h3>
+          <p th:text="${product.price} + '$'" class="product-price"><span>Per Kg</span> </p>
           <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
         </div>
       </div>
@@ -200,19 +169,19 @@
       <div class="col-lg-12">
         <div class="logo-carousel-inner">
           <div class="single-logo-item">
-            <img src="assets/img/company-logos/1.png" alt="">
+            <img src="/img/company-logos/1.png" alt="">
           </div>
           <div class="single-logo-item">
-            <img src="assets/img/company-logos/2.png" alt="">
+            <img src="/img/company-logos/2.png" alt="">
           </div>
           <div class="single-logo-item">
-            <img src="assets/img/company-logos/3.png" alt="">
+            <img src="/img/company-logos/3.png" alt="">
           </div>
           <div class="single-logo-item">
-            <img src="assets/img/company-logos/4.png" alt="">
+            <img src="/img/company-logos/4.png" alt="">
           </div>
           <div class="single-logo-item">
-            <img src="assets/img/company-logos/5.png" alt="">
+            <img src="/img/company-logos/5.png" alt="">
           </div>
         </div>
       </div>
@@ -293,26 +262,7 @@
 </div>
 <!-- end copyright -->
 
-<!-- jquery -->
-<script th:src="@{/js/jquery-1.11.3.min.js}"></script>
-<!-- bootstrap -->
-<script th:src="@{/js/bootstrap.min.js}"></script>
-<!-- count down -->
-<script th:src="@{/js/jquery.countdown.js}"></script>
-<!-- isotope -->
-<script th:src="@{/js/jquery.isotope-3.0.6.min.js}"></script>
-<!-- waypoints -->
-<script th:src="@{/js/waypoints.js}"></script>
-<!-- owl carousel -->
-<script th:src="@{/js/owl.carousel.min.js}"></script>
-<!-- magnific popup -->
-<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
-<!-- mean menu -->
-<script th:src="@{/js/jquery.meanmenu.min.js}"></script>
-<!-- sticker js -->
-<script th:src="@{/js/sticker.js}"></script>
-<!-- main js -->
-<script th:src="@{/js/main.js}"></script>
+<th:block th:replace="/client/fragments.html :: script"></th:block>
 
 </body>
 </html>

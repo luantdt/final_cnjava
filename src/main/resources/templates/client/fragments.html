@@ -19,7 +19,7 @@
   <!-- bootstrap -->
   <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
   <!-- owl carousel -->
-  <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/owl.carousel.css}">
   <!-- magnific popup -->
   <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
   <!-- animate css -->
@@ -29,7 +29,7 @@
   <!-- main style -->
   <link rel="stylesheet" th:href="@{/css/main.css}">
   <!-- responsive -->
-  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" th:href="@{/css/responsive.css}">
 
 </head>
 <body>
@@ -38,4 +38,27 @@
     </div>
 
 </body>
+
+<th:block th:fragment="script">
+  <!-- jquery -->
+  <script th:src="@{/js/jquery-1.11.3.min.js}"></script>
+  <!-- bootstrap -->
+  <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+  <!-- count down -->
+  <script th:src="@{/js/jquery.countdown.js}"></script>
+  <!-- isotope -->
+  <script th:src="@{/js/jquery.isotope-3.0.6.min.js}"></script>
+  <!-- waypoints -->
+  <script th:src="@{/js/waypoints.js}"></script>
+  <!-- owl carousel -->
+  <script th:src="@{/js/owl.carousel.min.js}"></script>
+  <!-- magnific popup -->
+  <script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+  <!-- mean menu -->
+  <script th:src="@{/js/jquery.meanmenu.min.js}"></script>
+  <!-- sticker js -->
+  <script th:src="@{/js/sticker.js}"></script>
+  <!-- main js -->
+  <script th:src="@{/js/main.js}"></script>
+</th:block>
 </html>
