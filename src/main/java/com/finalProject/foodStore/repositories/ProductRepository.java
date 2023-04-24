@@ -1,5 +1,7 @@
 package com.finalProject.foodStore.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.finalProject.foodStore.models.Food;
@@ -9,6 +11,11 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Food, Integer>{
 
+    @Query("select p from food p")
+    Page<Food> pageProduct(Pageable pageable);
+
+    @Query("select p from food p where p.description like %?1% or p.name like %?1%")
+    Page<Food> searchProducts(String keyword, Pageable pageable);
     @Query("select p from food p where p.status = 1")
     List<Food> getAllProducts();
 
