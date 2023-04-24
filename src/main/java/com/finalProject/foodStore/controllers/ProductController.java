@@ -25,8 +25,10 @@ public class ProductController {
     public String getHome(Model model){
         List<Category> categories = categoryService.getAllCategories();
         List<Food> products = productService.getAllProducts();
+        List<Food> limitProducts = productService.getLimitProducts();
         model.addAttribute("categories", categories);
         model.addAttribute("products", products);
+        model.addAttribute("limitProducts",limitProducts);
         return "client/index";
     }
 
@@ -42,7 +44,10 @@ public class ProductController {
     @GetMapping("/find-product/{id}")
     public String findProductById(@PathVariable("id") Integer id, Model model){
         Food food = productService.getProductById(id);
+        Integer categoryId = food.getCategory().getId();
+        List<Food> foods = productService.getRelatedProducts(categoryId);
         model.addAttribute("product", food);
+        model.addAttribute("products", foods);
         return "client/product-detail";
     }
 }

@@ -220,7 +220,7 @@
 			</div>
 
 			<div class="row">
-				<div class="col-lg-4 col-md-6 text-center" th:each="product : ${products}"
+				<div class="col-lg-4 col-md-6 text-center" th:each="product : ${limitProducts}"
 						th:if="${product.category.id == category.id}">
 					<div class="single-product-item">
 						<div class="product-image">

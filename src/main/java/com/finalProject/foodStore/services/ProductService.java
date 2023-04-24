@@ -19,7 +19,13 @@ public class ProductService {
         return productRepository.getAllProducts();
     }
 
+    public List<Food> getLimitProducts(){ return productRepository.getLimitProducts();}
+
     public Food getProductById(Integer id){
         return productRepository.getById(id);
+    }
+
+    public List<Food> getRelatedProducts(Integer categoryId){
+        return  productRepository.getRelatedProducts(categoryId);
     }
 }
