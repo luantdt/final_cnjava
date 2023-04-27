@@ -43,9 +43,21 @@
 		<!-- Page level custom scripts -->
 		<script th:src="@{/_admin/js/demo/chart-area-demo.js}"></script>
 		<script th:src="@{/_admin/js/demo/chart-pie-demo.js}"></script>
+		<script th:src="@{/_admin/js/script.js}"></script>
 	</div>
 
+	<div th:fragment="login_script">
+		<!-- Bootstrap core JavaScript-->
+		<script th:src="@{/_admin/vendor/jquery/jquery.min.js}"></script>
+		<script th:src="@{/_admin/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
+		<!-- Core plugin JavaScript-->
+		<script th:src="@{/_admin/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+		<!-- Custom scripts for all pages-->
+		<script th:src="@{/_admin/js/sb-admin-2.min.js}"></script>
+		<script th:src="@{/_admin/js/script.js}"></script>
+	</div>
 </body>
 
 </html>
