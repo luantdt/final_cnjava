@@ -43,4 +43,8 @@ public class ProductService {
     public List<Food> getRelatedProducts(Integer categoryId){
         return  productRepository.getRelatedProducts(categoryId);
     }
+
+    public List<Food> getProductsInCategory(Integer categoryId){
+        return productRepository.getProductsInCategory(categoryId);
+    }
 }

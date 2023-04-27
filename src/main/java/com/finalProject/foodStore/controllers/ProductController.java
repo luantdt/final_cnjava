@@ -1,5 +1,6 @@
 package com.finalProject.foodStore.controllers;
 
+import com.finalProject.foodStore.dto.CategoryDto;
 import com.finalProject.foodStore.models.Category;
 import com.finalProject.foodStore.models.Food;
 import com.finalProject.foodStore.services.CategoryService;
@@ -35,11 +36,17 @@ public class ProductController {
         model.addAttribute("limitProducts",limitProducts);
         return "client/index";
     }
+    @GetMapping("/contact")
+    public String getContact(){
+        return "/client/contact";
+    }
 
     @GetMapping("/product")
     public String getProduct(Model model)
     {
+        List<Category> categories = categoryService.getAllCategories();
         List<Food> products = productService.getAllProducts();
+        model.addAttribute("categories", categories);
         model.addAttribute("title", "Manage Product");
         model.addAttribute("products", products);
         return "client/shop";
@@ -47,8 +54,9 @@ public class ProductController {
 
     @GetMapping("/product/{pageNo}")
     public String productsPage(@PathVariable("pageNo") int pageNo, Model model){
-
+        List<CategoryDto> categoryDtoList = categoryService.getCategoryAndProduct();
         Page<Food> products = productService.pageProducts(pageNo);
+        model.addAttribute("categories", categoryDtoList);
         model.addAttribute("title", "Manage Product");
         model.addAttribute("size", products.getSize());
         model.addAttribute("totalPages", products.getTotalPages());
@@ -82,6 +90,19 @@ public class ProductController {
         model.addAttribute("product", food);
         model.addAttribute("products", foods);
         return "client/product-detail";
+    }
+
+    @GetMapping("/products-in-category/{id}")
+    public String getProductsInCategory(@PathVariable("id") Integer categoryId, Model model){
+        List<CategoryDto> categoryDtoList = categoryService.getCategoryAndProduct();
+        Category category = categoryService.findById(categoryId);
+        List<Food> products = productService.getProductsInCategory(categoryId);
+        model.addAttribute("categories", categoryDtoList);
+        model.addAttribute("category", category);
+        model.addAttribute("products", products);
+
+
+        return "client/products-in-category";
     }
 
 

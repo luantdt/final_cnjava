@@ -1,5 +1,6 @@
 package com.finalProject.foodStore.services;
 
+import com.finalProject.foodStore.dto.CategoryDto;
 import com.finalProject.foodStore.models.Category;
 import com.finalProject.foodStore.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,5 +17,15 @@ public class CategoryService {
     public List<Category> getAllCategories(){
         return categoryRepository.getAllCategories();
     }
+
+
+    public List<CategoryDto> getCategoryAndProduct(){
+        return categoryRepository.getCategoryAndProduct();
+    }
+
+    public Category findById(Integer id){
+        return categoryRepository.findById(id).get();
+    }
+
 
 }
