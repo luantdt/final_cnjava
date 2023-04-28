@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminHomePage {
 	@GetMapping("")
 	public String getAdminHomePage() {
-		return "/admin/index";
+		return "admin/index";
 	}
 }

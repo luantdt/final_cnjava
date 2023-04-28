@@ -20,6 +20,7 @@ import com.finalProject.foodStore.models.User;
 import com.finalProject.foodStore.repositories.TokenRepository;
 import com.finalProject.foodStore.repositories.UserRepository;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class AuthenticationService {
 	@Autowired
 	private final AuthenticationManager authenticationManager;
 
-	public AuthenticationResponse register(RegisterRequest request) {
+	public AuthenticationResponse register(RegisterRequest request, HttpServletResponse response) {
 		var user = User.builder()
 				.name(request.getName())
 				.email(request.getEmail())
@@ -58,17 +59,32 @@ public class AuthenticationService {
 		var jwtToken = jwtService.generateToken(user);
 		var refreshToken = jwtService.generateRefreshToken(user);
 		saveUserToken(savedUser, jwtToken);
+		saveTokenIntoCookie(response, jwtToken, refreshToken);
 		return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).build();
 	}
 
-	public AuthenticationResponse authenticate(AuthenticationRequest request) {
+	public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletResponse response) {
+		
 		authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+		
 		var users = repository.findByEmail(request.getEmail()).orElseThrow();
 		var jwtToken = jwtService.generateToken(users);
 		var refreshToken = jwtService.generateRefreshToken(users);
 		revokeAllUserTokens(users);
 		saveUserToken(users, jwtToken);
+   
+        Cookie access_cookie = new Cookie("access_token", jwtToken);
+        Cookie refresh_coookie = new Cookie("refresh_token", refreshToken);
+        
+        access_cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
+        access_cookie.setPath("/");
+        
+        refresh_coookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
+        refresh_coookie.setPath("/");
+        
+        response.addCookie(access_cookie);
+        response.addCookie(refresh_coookie);
 		return AuthenticationResponse.builder().accessToken(jwtToken).refreshToken(refreshToken).build();
 	}
 
@@ -109,5 +125,19 @@ public class AuthenticationService {
 				new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
 			}
 		}
+	}
+	
+	public void saveTokenIntoCookie(HttpServletResponse response, String accessToken, String refreshToken) {
+		Cookie access_cookie = new Cookie("access_token", accessToken);
+        Cookie refresh_coookie = new Cookie("refresh_token", refreshToken);
+        
+        access_cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
+        access_cookie.setPath("/");
+        
+        refresh_coookie.setMaxAge(7 * 24 * 60 * 60);
+        refresh_coookie.setPath("/");
+        
+        response.addCookie(access_cookie);
+        response.addCookie(refresh_coookie);
 	}
 }

@@ -1,4 +1,4 @@
-package com.finalProject.foodStore.jwt;
+package com.finalProject.foodStore.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
