@@ -23,6 +23,7 @@ public class SecurityConfiguration {
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
 		http.cors().disable().csrf().disable().authorizeHttpRequests()
 				/*
 				 * .requestMatchers("/", "/css/**", "/js/**", "/img/**", "/bootstrap/**",
@@ -35,10 +36,6 @@ public class SecurityConfiguration {
 				.requestMatchers("/test")
 				.authenticated().anyRequest().permitAll().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authenticationProvider(authenticationProvider)
-				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).logout()
-				.logoutUrl("/auth/logout").addLogoutHandler(logoutHandler)
-				.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
 		
 		return http.build();
 	}
