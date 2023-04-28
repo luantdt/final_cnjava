@@ -74,4 +74,6 @@ public class Food {
 	
 	@Column(nullable = true)
 	private Date endSale;
+	
+	
 }
