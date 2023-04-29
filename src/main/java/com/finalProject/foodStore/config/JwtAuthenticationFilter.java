@@ -43,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
+		
 		Cookie cookie = WebUtils.getCookie(request, "access_token");
 		
 		if (cookie == null) {
@@ -54,7 +55,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				return;
 			}
 		}
-		
 		
 		final String userEmail;
 		final String jwt = cookie.getValue();
