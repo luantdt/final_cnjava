@@ -16,6 +16,11 @@ public interface CartRepository  extends JpaRepository<Cart, Integer> {
 
     @Modifying
     @Transactional
+    @Query("DELETE FROM cart c WHERE c.userId = :UID")
+    void deleteAllByUID(@Param("UID") int UID);
+
     @Query(value = "DELETE FROM cart c WHERE c.foodId = ?1", nativeQuery = true)
     void deleteItemById(Integer foodId);
+
+
 }

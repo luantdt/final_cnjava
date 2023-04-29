@@ -25,7 +25,9 @@ public class CartService {
     @Autowired
     private ProductRepository productRepository;
 
+
     List<Food> checkoutDetail = new ArrayList<Food>();
+
     public void getModel(Model model) {
 
         // User user = userRepository.findByEmail(checkAuth.getAuthName());
@@ -54,7 +56,7 @@ public class CartService {
         newCart.setQuantity(1);
         cartRepository.save(newCart);
 
-        newCart.setQuantity(newCart.getQuantity()+1);
+
 
 
 
