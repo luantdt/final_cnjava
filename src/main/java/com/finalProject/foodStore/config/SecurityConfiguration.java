@@ -33,7 +33,7 @@ public class SecurityConfiguration {
 		 * "/image/**").permitAll().anyRequest().authenticated().and()
 		 */
 
-		.requestMatchers("/test")
+		.requestMatchers("/test", "/order", "/cart/pay")
 		.authenticated().anyRequest().permitAll().and().sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		.authenticationProvider(authenticationProvider)

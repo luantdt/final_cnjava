@@ -2,11 +2,13 @@ package com.finalProject.foodStore.services;
 
 import com.finalProject.foodStore.models.*;
 import com.finalProject.foodStore.repositories.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,13 +30,15 @@ public class OrderService {
     @Autowired
     private OrderUnitRepository orderUnitRepository;
 
-    public void payAllItem(){
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    public void payAllItem(HttpServletRequest httpServletRequest){
 
         OrderFood orderFood = new OrderFood();
 
-        //User user =userRepository.findByEmail();
-
-        List<Cart> cart = cartRepository.findAllByUID(252);
+        User user = authenticationService.AuthInfor(httpServletRequest);
+        List<Cart> cart = cartRepository.findAllByUID(user.getId());
         List<Food> checkoutDetail = new ArrayList<Food>();
         int total = 0;
 
@@ -47,7 +51,7 @@ public class OrderService {
         }
 
         orderFood.setTotal(total);
-//        orderFood.setUser();
+        orderFood.setUser(user);
         orderFoodRepository.save(orderFood);
         orderFoodRepository.flush();
         for(Food food : checkoutDetail){
@@ -59,17 +63,18 @@ public class OrderService {
             orderUnitRepository.save(orderUnit);
         }
 
-        cartRepository.deleteAllByUID(252);
+        cartRepository.deleteAllByUID(user.getId());
     }
 
 
-    public void getAllAndModel(Model model) {
-        //User user = userRepository.findByEmail(checkAuth.getAuthName());
-        List<OrderFood> orderFood = orderFoodRepository.findAllByUID(252);
+    public void getAllAndModel(Model model, HttpServletRequest httpServletRequest) {
+
+        User user = authenticationService.AuthInfor(httpServletRequest);
+        List<OrderFood> orderFood = orderFoodRepository.findAllByUID(user.getId());
         List<OrderUnit> orderUnit = new ArrayList<OrderUnit>();
         List<String> proName = new ArrayList<String>();
-        for (OrderFood orderDetail2 : orderFood) {
-            List<OrderUnit> unit = orderUnitRepository.findAllByOID(orderDetail2.getId());
+        for (OrderFood orderFood1 : orderFood) {
+            List<OrderUnit> unit = orderUnitRepository.findAllByOID(orderFood1.getId());
             orderUnit.addAll(unit);
             for (OrderUnit u : unit) {
                 String name = productRepository.findById(u.getId()).get().getName();

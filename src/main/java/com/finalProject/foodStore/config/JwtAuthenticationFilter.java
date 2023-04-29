@@ -47,7 +47,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		Cookie cookie = WebUtils.getCookie(request, "access_token");
 		
 		if (cookie == null) {
-			if (request.getServletPath().contains("/test") ) {
+			if (request.getServletPath().contains("/test") || request.getServletPath().contains("/order")
+		|| request.getServletPath().contains("/cart/pay")) {
 				response.sendRedirect(request.getContextPath() + "/auth/login");
 				return;
 			} else {

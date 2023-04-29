@@ -13,7 +13,7 @@ public interface ProductRepository extends JpaRepository<Food, Integer>{
 
     List<Food> findByCategoryId(int CategoryId);
 
-    @Query("select p from food p")
+    @Query("select p from food p where p.status = 1")
     Page<Food> pageProduct(Pageable pageable);
 
     @Query("select p from food p where p.description like %?1% or p.name like %?1%")
@@ -24,7 +24,7 @@ public interface ProductRepository extends JpaRepository<Food, Integer>{
     @Query(value = "select * from food p where p.status = 1", nativeQuery = true)
     List<Food> getLimitProducts();
 
-    @Query(value = "select * from food p where p.categoryId = ?1 limit 3", nativeQuery = true)
+    @Query(value = "select * from food p where p.categoryId = ?1 and p.status = 1 limit 3", nativeQuery = true)
     List<Food> getRelatedProducts(Integer categoryId);
 
     @Query(value = "select * from food p where p.categoryId = ?1", nativeQuery = true)
