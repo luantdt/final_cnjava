@@ -18,7 +18,7 @@
 
 <!-- search area -->
 <div th:replace="client/fragments.html :: search"></div>
-<!-- end search arewa -->
+<!-- end search area -->
 
 <!-- breadcrumb-section -->
 <div class="breadcrumb-section breadcrumb-bg">
@@ -93,7 +93,7 @@
                     </table>
                     <div class="cart-buttons">
                         <a href="cart.html" class="boxed-btn">Update Cart</a>
-                        <a href="checkout.html" class="boxed-btn black">Check Out</a>
+                        <a th:href="@{/cart/pay}" class="boxed-btn black">Check Out</a>
                     </div>
                 </div>
 

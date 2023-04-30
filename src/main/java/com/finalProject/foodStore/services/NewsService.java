@@ -12,19 +12,19 @@ import com.finalProject.foodStore.repositories.NewsRepository;
 public class NewsService {
 	@Autowired
 	private NewsRepository NRepo;
-	
+
 	public void save(News a) {
 		NRepo.save(a);
 	}
-	
-	public List<News> getAllBlog(){
+
+	public List<News> getAllBlog() {
 		return NRepo.findAll();
 	}
-	
+
 	public News getBlogById(int id) {
 		return NRepo.findById(id).get();
 	}
-	
+
 	public void deleteBlogById(int id) {
 		NRepo.deleteById(id);
 	}

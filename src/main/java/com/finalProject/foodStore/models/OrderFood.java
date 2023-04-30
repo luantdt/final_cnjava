@@ -1,26 +1,17 @@
 package com.finalProject.foodStore.models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Table
 @Entity(name = "orderfood")
 @Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderFood {
@@ -28,14 +19,8 @@ public class OrderFood {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "user")
-	@EqualsAndHashCode.Exclude
-	@ToString.Exclude
-	private User user;
-
 	@CreationTimestamp
-	private Date orderDate;
+	private LocalDateTime orderDate;
 	
 	private float shippingFee = 20;
 	
@@ -43,10 +28,26 @@ public class OrderFood {
 	private String note;
 	private float total;
 
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "user")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	@JsonManagedReference
+	private User user;
+
+
+	@PrePersist
+	protected void onCreate() {
+		orderDate = LocalDateTime.now();
+		status = "shipping";
+		shippingFee = 20;
+	}
+
 	/*
 	 * @Transient public int calTotal() { int sum = 0; List<ProductOrder> pros =
 	 * getProductOrder(); for (ProductOrder productOrder : pros) { sum +=
 	 * productOrder.getProducts().getPrice() * productOrder.getQuantity(); } return
 	 * sum; }
 	 */
+
 }

@@ -20,6 +20,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Table
 @Entity(name = "news")
@@ -27,6 +32,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class News {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -45,5 +51,5 @@ public class News {
     @Column(name = "date", nullable = false, updatable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private Date date;
-    
+ 
 }

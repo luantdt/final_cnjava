@@ -6,6 +6,7 @@ import com.finalProject.foodStore.models.User;
 import com.finalProject.foodStore.repositories.CartRepository;
 import com.finalProject.foodStore.repositories.ProductRepository;
 import com.finalProject.foodStore.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -25,11 +26,16 @@ public class CartService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private AuthenticationService authenticationService;
     List<Food> checkoutDetail = new ArrayList<Food>();
-    public void getModel(Model model) {
+
+    public void getModel(Model model, HttpServletRequest httpServletRequest) {
 
         // User user = userRepository.findByEmail(checkAuth.getAuthName());
-        List<Cart> cart = cartRepository.findAllByUID(252);
+        User user = authenticationService.AuthInfor(httpServletRequest);
+
+        List<Cart> cart = cartRepository.findAllByUID(user.getId());
         List<Food> checkoutDetail = new ArrayList<Food>();
         int total = 0;
         if (cart.size() > 0) {
@@ -45,16 +51,17 @@ public class CartService {
         model.addAttribute("numberItem", cart.size());
     }
 
-    public void addCart(int id) {
+    public void addCart(int id, HttpServletRequest httpServletRequest) {
         //User user = userRepository.findByEmail(checkAuth.getAuthName());
         Cart newCart = new Cart();
+        User user = authenticationService.AuthInfor(httpServletRequest);
 
         newCart.setFoodId(id);
-        newCart.setUserId(252);
+        newCart.setUserId(user.getId());
         newCart.setQuantity(1);
         cartRepository.save(newCart);
 
-        newCart.setQuantity(newCart.getQuantity()+1);
+
 
 
 

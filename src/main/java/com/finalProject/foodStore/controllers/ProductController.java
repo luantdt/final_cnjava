@@ -3,7 +3,9 @@ package com.finalProject.foodStore.controllers;
 import com.finalProject.foodStore.dto.CategoryDto;
 import com.finalProject.foodStore.models.Category;
 import com.finalProject.foodStore.models.Food;
+import com.finalProject.foodStore.models.News;
 import com.finalProject.foodStore.services.CategoryService;
+import com.finalProject.foodStore.services.NewsService;
 import com.finalProject.foodStore.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,15 +27,21 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private NewsService newsService;
+
     @GetMapping("/")
     public String getHome(Model model){
         List<Category> categories = categoryService.getAllCategories();
         List<Food> products = productService.getAllProducts();
         List<Food> limitProducts = productService.getLimitProducts();
+        List<News> news = newsService.getAllNews();
         model.addAttribute("title", "Home");
         model.addAttribute("categories", categories);
         model.addAttribute("products", products);
         model.addAttribute("limitProducts",limitProducts);
+        model.addAttribute("news", news);
+
         return "client/index";
     }
     @GetMapping("/contact")
