@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.finalProject.foodStore.jwt.Role;
 
 import jakarta.persistence.Column;
@@ -68,9 +69,11 @@ public class User implements UserDetails{
 	private Role role;
 	
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<Token> tokens;
 
 	@Override
+	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
 		return List.of(new SimpleGrantedAuthority(role.name()));
@@ -78,7 +81,6 @@ public class User implements UserDetails{
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return email;
 	}
 
@@ -108,6 +110,6 @@ public class User implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return true;
+		return status;
 	}		
 }

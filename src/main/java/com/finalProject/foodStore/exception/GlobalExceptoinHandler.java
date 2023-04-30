@@ -6,7 +6,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.finalProject.foodStore.jwt.ResponseObject;
+import com.finalProject.foodStore.models.ResponseObject;
 
 @RestControllerAdvice
 public class GlobalExceptoinHandler {

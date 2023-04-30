@@ -43,7 +43,7 @@ public class Food {
 	private Category category;
 
 	@NotEmpty(message = "name of food is not empty")
-	@NotNull(message = "name of foood is not null")
+	@NotNull(message = "name of food is not null")
 	private String name;
 
 	@NotNull(message = "quantity field cannot be left null")
@@ -51,11 +51,11 @@ public class Food {
 	private float quantity;
 
 	@NotEmpty(message = "description of food is not empty")
-	@NotNull(message = "description of foood is not null")
+	@NotNull(message = "description of food is not null")
 	private String description;
 
 	@NotEmpty(message = "image of food is not empty")
-	@NotNull(message = "image of foood is not null")
+	@NotNull(message = "image of food is not null")
 	private String image;
 	
 	private Boolean isSale = true;
