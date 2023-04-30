@@ -45,7 +45,7 @@ public class News {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private Date date;
     
-    @NotEmpty(message = "shortDes of blog is not empty")
-	@NotNull(message = "shortDes of blog is not null")
-    private String shortdes;
+	@NotEmpty(message = "short Description of blog is not empty")
+	@NotNull(message = "short Descrt of blog is not null")
+	private String shortDes;
 }

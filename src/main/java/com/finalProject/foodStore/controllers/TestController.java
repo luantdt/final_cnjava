@@ -1,5 +1,6 @@
 package com.finalProject.foodStore.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,12 +14,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.finalProject.foodStore.models.Cart;
+import com.finalProject.foodStore.models.Food;
 import com.finalProject.foodStore.models.OrderFood;
 import com.finalProject.foodStore.models.OrderUnit;
 import com.finalProject.foodStore.models.ResponseObject;
 import com.finalProject.foodStore.models.User;
+import com.finalProject.foodStore.repositories.CartRepository;
 import com.finalProject.foodStore.repositories.OrderFoodRepository;
 import com.finalProject.foodStore.repositories.OrderUnitRepository;
+import com.finalProject.foodStore.repositories.ProductRepository;
 import com.finalProject.foodStore.repositories.UserRepository;
 import com.finalProject.foodStore.services.AuthenticationService;
 
@@ -31,29 +36,39 @@ import jakarta.servlet.http.HttpServletResponse;
 @PreAuthorize("hasRole('USER')")
 public class TestController {
 	@Autowired
-	private AuthenticationService authService;
+	private CartRepository cartRepository;
 
 	@Autowired
-	private UserRepository userRepo;
-	
+	private ProductRepository productRepository;
+
 	@Autowired
 	private OrderFoodRepository orderFoodRepository;
+
 	@Autowired
 	private OrderUnitRepository orderUnitRepository;
-	
+
+	@Autowired
+	private AuthenticationService authenticationService;
+
 	@GetMapping("")
 	public ResponseEntity<ResponseObject> getTestPage(HttpServletRequest req, HttpServletResponse res) {
 
-		User user = authService.AuthInfor(req);
+		User user = authenticationService.AuthInfor(req);
 
 		List<OrderFood> orderFood = orderFoodRepository.findAllByUser(user);
-		List<OrderUnit> unit = orderUnitRepository.findAllByOID(orderFood.get(0).getId());
-		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Login has successful", unit));
+
+		List<OrderUnit> orderUnit = new ArrayList<OrderUnit>();
+		List<String> productName = new ArrayList<String>();
+		for (OrderFood orderFood1 : orderFood) {
+			List<OrderUnit> unit = orderUnitRepository.findAllByOID(orderFood1.getId());
+			orderUnit.addAll(unit);
+			for (OrderUnit u : unit) {
+				String name = productRepository.findById(u.getFoodId()).get().getName();
+				productName.add(name);
+			}
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Login has successful", orderUnit));
 	}
 
-	@GetMapping("/rest/{id}")
-	public ResponseEntity<ResponseObject> getUser(@PathVariable int id) {
-		Optional<User> user = userRepo.findById(id);
-		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Login has successful", user.get()));
-	}
 }

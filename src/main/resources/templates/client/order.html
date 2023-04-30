@@ -1,179 +1,252 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head th:replace="client/fragments.html :: head">
-
 <body>
 
-<!--PreLoader-->
-<div class="loader">
-  <div class="loader-inner">
-    <div class="circle"></div>
-  </div>
-</div>
-<!--PreLoader Ends-->
+	<!--PreLoader-->
+	<div class="loader">
+		<div class="loader-inner">
+			<div class="circle"></div>
+		</div>
+	</div>
+	<!--PreLoader Ends-->
 
-<!-- header -->
-<div th:replace="client/fragments.html :: header"></div>
+	<!-- header -->
+	<div th:replace="client/fragments.html :: header"></div>
 
-<!-- end header -->
+	<!-- end header -->
 
-<!-- search area -->
-<div th:replace="client/fragments.html :: search"></div>
+	<!-- search area -->
+	<div th:replace="client/fragments.html :: search"></div>
 
-<!-- end search area -->
+	<!-- end search area -->
 
-<!-- breadcrumb-section -->
-<div class="breadcrumb-section breadcrumb-bg">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 offset-lg-2 text-center">
-        <div class="breadcrumb-text">
-          <p>Fresh and Organic</p>
-          <h1>Check Out Product</h1>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end breadcrumb section -->
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section breadcrumb-bg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<p>Fresh and Organic</p>
+						<h1>Check Out Product</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
 
-<!-- check out section -->
-<div class="checkout-section mt-150 mb-150">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8">
-        <div class="checkout-accordion-wrap">
-          <div class="accordion" id="accordionExample">
-            <div class="card single-accordion">
-              <div class="card-header" id="headingThree">
-                <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Card Details
-                  </button>
-                </h5>
-              </div>
-              <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                <div class="card-body">
-                  <div class="card-details">
-                    <p>Your card details goes here.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+	<!-- check out section -->
+	<div class="checkout-section mt-150 mb-150">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="checkout-accordion-wrap">
+						<div class="accordion" id="accordionExample">
+							<div class="card single-accordion">
+								<div class="card-header" id="headingThree">
+									<h5 class="mb-0">
+										<button class="btn btn-link collapsed" type="button"
+											data-toggle="collapse" data-target="#collapseThree"
+											aria-expanded="false" aria-controls="collapseThree">
+											Card Details</button>
+									</h5>
+								</div>
+								<div id="collapseThree" class="collapse"
+									aria-labelledby="headingThree" data-parent="#accordionExample">
+									<div class="card-body">
+										<div class="card-details">
+											<div class="center_content">
+												<div class="center_title_bar">Your order</div>
+												<div class="accordion mt-5" id="accordionExample">
+													<div class="accordion-item"
+														th:each="detail : ${orderFood}">
+														<h2 class="accordion-header">
+															<button class="accordion-button collapsed" type="button"
+																data-bs-toggle="collapse"
+																th:data-bs-target="${'#do' + detail.id}"
+																aria-expanded="false"
+																th:aria-controls="${'do' + detail.id}"
+																th:text="'Your bill is ' + ${detail.total} + ' $'">
+															</button>
 
-        </div>
-      </div>
+														</h2>
+														<div th:id="${'do' + detail.id}"
+															class="accordion-collapse collapse"
+															data-bs-parent="#accordionExample">
+															<div class="accordion-body">
+																<div>
+																	<h6>Order date</h6>
+																	[[${#temporals.format(detail.orderDate, 'dd/MM/yyyy
+																	HH:mm:ss')}]]
+																</div>
+																<div>
+																	<h6>Status</h6>
+																	Shipping
+																</div>
+																<table class="table mt-3">
+																	<thead>
+																		<tr>
+																			<th>Name</th>
+																			<th>Quality</th>
+																			<th>Price</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<div th:each="unit, iter: ${orderUnit}">
+																			<tr th:if="${unit.orderId == detail.id}">
+																				<td th:text="${productName[iter.index]}"></td>
+																				<td th:text="1"></td>
+																				<td th:text="${unit.unitPrice + '.000 VND'}"></td>
+																			</tr>
+																		</div>
+																		<tr>
+																			<th colspan="2" class="table-active">Total item:</th>
+																			<th th:text="${detail.total + ' $'}">Total:</th>
+																		</tr>
+																		<tr>
+																			<th colspan="2" class="table-active">Delivery
+																				fee:</th>
+																			<th>20.000 VND</th>
+																		</tr>
+																		<tr>
+																			<th colspan="2" class="table-active">Total:</th>
+																			<th th:text="${detail.total}+ 5  + ' $">Total:</th>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div>
 
-      <div class="col-lg-4">
-        <div class="order-details-wrap">
-          <table class="order-details">
-            <thead>
-            <tr>
-              <th>Your order Details</th>
-              <th>Price</th>
-            </tr>
-            </thead>
-            <tbody class="order-details-body">
-            <tr>
-              <td>Product</td>
-              <td>Total</td>
-            </tr>
-            <tr>
-              <td>Strawberry</td>
-              <td>$85.00</td>
-            </tr>
-            <tr>
-              <td>Berry</td>
-              <td>$70.00</td>
-            </tr>
-            <tr>
-              <td>Lemon</td>
-              <td>$35.00</td>
-            </tr>
-            </tbody>
-            <tbody class="checkout-details">
-            <tr>
-              <td>Subtotal</td>
-              <td>$190</td>
-            </tr>
-            <tr>
-              <td>Shipping</td>
-              <td>$50</td>
-            </tr>
-            <tr>
-              <td>Total</td>
-              <td>$240</td>
-            </tr>
-            </tbody>
-          </table>
-          <a href="#" class="boxed-btn">Place Order</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end check out section -->
+												</div>
 
-<!-- logo carousel -->
-<div class="logo-carousel-section">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="logo-carousel-inner">
-          <div class="single-logo-item">
-            <img src="assets/img/company-logos/1.png" alt="">
-          </div>
-          <div class="single-logo-item">
-            <img src="assets/img/company-logos/2.png" alt="">
-          </div>
-          <div class="single-logo-item">
-            <img src="assets/img/company-logos/3.png" alt="">
-          </div>
-          <div class="single-logo-item">
-            <img src="assets/img/company-logos/4.png" alt="">
-          </div>
-          <div class="single-logo-item">
-            <img src="assets/img/company-logos/5.png" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end logo carousel -->
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 
-<!-- footer -->
-<div th:replace="client/fragments.html :: footer"></div>
+					</div>
+				</div>
 
-<!-- end footer -->
+				<div class="col-lg-4">
+					<div class="order-details-wrap">
+						<table class="order-details">
+							<thead>
+								<tr>
+									<th>Your order Details</th>
+									<th>Price</th>
+								</tr>
+							</thead>
+							<tbody class="order-details-body">
+								<tr>
+									<td>Product</td>
+									<td>Total</td>
+								</tr>
+								<tr>
+									<td>Strawberry</td>
+									<td>$85.00</td>
+								</tr>
+								<tr>
+									<td>Berry</td>
+									<td>$70.00</td>
+								</tr>
+								<tr>
+									<td>Lemon</td>
+									<td>$35.00</td>
+								</tr>
+							</tbody>
+							<tbody class="checkout-details">
+								<tr>
+									<td>Subtotal</td>
+									<td>$190</td>
+								</tr>
+								<tr>
+									<td>Shipping</td>
+									<td>$50</td>
+								</tr>
+								<tr>
+									<td>Total</td>
+									<td>$240</td>
+								</tr>
+							</tbody>
+						</table>
+						<a href="#" class="boxed-btn">Place Order</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end check out section -->
 
-<!-- copyright -->
-<div class="copyright">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 col-md-12">
-        <p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>,  All Rights Reserved.<br>
-          Distributed By - <a href="https://themewagon.com/">Themewagon</a>
-        </p>
-      </div>
-      <div class="col-lg-6 text-right col-md-12">
-        <div class="social-icons">
-          <ul>
-            <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-            <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-            <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-            <li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-            <li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end copyright -->
+	<!-- logo carousel -->
+	<div class="logo-carousel-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="logo-carousel-inner">
+						<div class="single-logo-item">
+							<img src="assets/img/company-logos/1.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="assets/img/company-logos/2.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="assets/img/company-logos/3.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="assets/img/company-logos/4.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="assets/img/company-logos/5.png" alt="">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end logo carousel -->
 
-<th:block th:replace="/client/fragments.html :: script"></th:block>
+	<!-- footer -->
+	<div th:replace="client/fragments.html :: footer"></div>
+
+	<!-- end footer -->
+
+	<!-- copyright -->
+	<div class="copyright">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 col-md-12">
+					<p>
+						Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran
+							Hossain</a>, All Rights Reserved.<br> Distributed By - <a
+							href="https://themewagon.com/">Themewagon</a>
+					</p>
+				</div>
+				<div class="col-lg-6 text-right col-md-12">
+					<div class="social-icons">
+						<ul>
+							<li><a href="#" target="_blank"><i
+									class="fab fa-facebook-f"></i></a></li>
+							<li><a href="#" target="_blank"><i
+									class="fab fa-twitter"></i></a></li>
+							<li><a href="#" target="_blank"><i
+									class="fab fa-instagram"></i></a></li>
+							<li><a href="#" target="_blank"><i
+									class="fab fa-linkedin"></i></a></li>
+							<li><a href="#" target="_blank"><i
+									class="fab fa-dribbble"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end copyright -->
+
+	<th:block th:replace="/client/fragments.html :: script"></th:block>
 
 
 </body>

@@ -4,9 +4,14 @@ import com.finalProject.foodStore.dto.CategoryDto;
 import com.finalProject.foodStore.models.Category;
 import com.finalProject.foodStore.models.Food;
 import com.finalProject.foodStore.models.News;
+import com.finalProject.foodStore.models.User;
+import com.finalProject.foodStore.services.AuthenticationService;
 import com.finalProject.foodStore.services.CategoryService;
 import com.finalProject.foodStore.services.NewsService;
 import com.finalProject.foodStore.services.ProductService;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -30,23 +35,47 @@ public class ProductController {
 
     @Autowired
     private NewsService newsService;
+    
+    @Autowired
+    private AuthenticationService authService;
 
     @GetMapping("/")
-    public String getHome(Model model){
+    public String getHome(Model model, HttpServletRequest req){
         List<Category> categories = categoryService.getAllCategories();
         List<Food> products = productService.getAllProducts();
         List<Food> limitProducts = productService.getLimitProducts();
- 
+        List<News> news = newsService.getAllBlog();
         model.addAttribute("title", "Home");
         model.addAttribute("categories", categories);
         model.addAttribute("products", products);
         model.addAttribute("limitProducts",limitProducts);
-
+        model.addAttribute("news",news);
+        User user = authService.AuthInfor(req);
+        if (user == null) {
+        	 model.addAttribute("auth", false);
+        } else {
+        	model.addAttribute("auth", true);
+        }
+        
         return "client/index";
     }
+    
+    @GetMapping("/news")
+    public String getNews(Model model)
+    {
+    	List<News> news = newsService.getAllBlog();
+    	model.addAttribute("news",news);
+        return "client/news";
+    }
+	@RequestMapping("/single-news/{id}")
+	public String sigleNew(@PathVariable("id") int id, Model model) {
+		News a = newsService.getBlogById(id);
+		model.addAttribute("news", a);
+		return "client/single-news";
+	}
     @GetMapping("/contact")
     public String getContact(){
-        return "/client/contact";
+        return "client/contact";
     }
 
     @GetMapping("/product")

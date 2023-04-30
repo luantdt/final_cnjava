@@ -55,7 +55,7 @@
                     </li>
                     <li><a href="about.html">About</a></li>
 
-                    <li><a href="news.html">News</a>
+                    <li><a href="/news">News</a>
 
                     </li>
                     <li><a th:href="@{/contact}">Contact</a></li>
@@ -65,6 +65,8 @@
                       <div class="header-icons">
                         <a class="shopping-cart" th:href="${'/cart'}"><i class="fas fa-shopping-cart"></i></a>
                         <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+                        <a th:if="${auth}"class="mobile-hide search-bar-icon" href="/auth/logout">Logout</a>
+                        <a th:unless="${auth}"class="" href="/auth/login">Login</a>
                       </div>
                     </li>
                   </ul>

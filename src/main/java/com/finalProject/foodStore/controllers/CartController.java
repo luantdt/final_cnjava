@@ -29,7 +29,7 @@ public class CartController {
 
     @Autowired
     private OrderService orderService;
-
+    
     @GetMapping("")
     public String getCart(Model model, HttpServletRequest httpServletRequest){
         List<Category> categories = categoryRepository.getAllCategories();

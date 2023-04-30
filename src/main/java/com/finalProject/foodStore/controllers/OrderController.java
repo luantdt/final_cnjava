@@ -22,7 +22,8 @@ public class OrderController {
     @GetMapping("")
     public String showOrder(Model model, HttpServletRequest  httpServletRequest){
         orderService.getAllAndModel(model, httpServletRequest);
-        return "/client/order";
+
+        return "client/order";
     }
 
     @Autowired
