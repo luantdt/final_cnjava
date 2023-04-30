@@ -36,12 +36,11 @@ public class ProductController {
         List<Category> categories = categoryService.getAllCategories();
         List<Food> products = productService.getAllProducts();
         List<Food> limitProducts = productService.getLimitProducts();
-        List<News> news = newsService.getAllNews();
+ 
         model.addAttribute("title", "Home");
         model.addAttribute("categories", categories);
         model.addAttribute("products", products);
         model.addAttribute("limitProducts",limitProducts);
-        model.addAttribute("news", news);
 
         return "client/index";
     }

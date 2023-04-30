@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -42,11 +43,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
-		
+
 		Cookie cookie = WebUtils.getCookie(request, "access_token");
-		
+
 		if (cookie == null) {
-			if (request.getServletPath().contains("/test")) {
+			if (request.getServletPath().contains("/test") || request.getServletPath().contains("/order")
+					|| request.getServletPath().contains("/cart/pay") || request.getServletPath().contains("/cart")
+					|| request.getServletPath().contains("/admin")) {
 				response.sendRedirect(request.getContextPath() + "/auth/login");
 				return;
 			} else {
@@ -54,12 +57,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				return;
 			}
 		}
-		
+
 		final String userEmail;
 		final String jwt = cookie.getValue();
 		userEmail = jwtService.extractUsername(jwt);
 		if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+			boolean isAdmin = false;
+			for (GrantedAuthority authority : userDetails.getAuthorities()) {
+				if (authority.getAuthority() == "ADMIN") {
+					isAdmin = true;
+				}
+			}
+			
+			if (request.getServletPath().contains("/admin") && isAdmin == false) {
+				response.sendRedirect(request.getContextPath() + "/");
+				return;
+			}
+			
 			var isTokenValid = tokenRepository.findByToken(jwt).map(t -> !t.isExpired() && !t.isRevoked())
 					.orElse(false);
 			if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {

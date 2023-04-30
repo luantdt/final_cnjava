@@ -25,14 +25,7 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		http.csrf().disable().authorizeHttpRequests()
-		/*
-		 * .requestMatchers("/", "/css/**", "/js/**", "/img/**", "/bootstrap/**",
-		 * "/webfonts/**", "/_admin/**") .permitAll() .requestMatchers("/auth/register",
-		 * "/auth/login", "/auth/logout", "/auth/refresh-token", "/admin", "/admin/**")
-		 * .permitAll().requestMatchers("/image",
-		 * "/image/**").permitAll().anyRequest().authenticated().and()
-		 */
-		.requestMatchers("/test", "/order", "/cart","/cart/**")
+		.requestMatchers("/test", "/order", "/cart","/cart/**", "/admin", "admin/**")
 		.authenticated().anyRequest().permitAll().and().sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		.authenticationProvider(authenticationProvider)
