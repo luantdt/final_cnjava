@@ -1,9 +1,9 @@
 # Final CNJAVA 1
 
 + 51900815 - Trần Vũ Luân
-+
-+
-+
++ 51900067 - Nguyễn Trung Hậu
++ 51900021 - Nguyễn Chánh Đại
++ 51900103 - Tô Tấn Khải
 
 ## Link information
 - Database  diagram: https://drive.google.com/file/d/1Al24ELS48PnMa6pUMYEl0hQuiLGupVxo/view?usp=sharing
