@@ -19,9 +19,6 @@ public class OrderService {
     private CartRepository cartRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private ProductRepository productRepository;
 
     @Autowired
@@ -72,18 +69,19 @@ public class OrderService {
         User user = authenticationService.AuthInfor(httpServletRequest);
         List<OrderFood> orderFood = orderFoodRepository.findAllByUID(user.getId());
         List<OrderUnit> orderUnit = new ArrayList<OrderUnit>();
-        List<String> proName = new ArrayList<String>();
+        List<String> productName = new ArrayList<String>();
         for (OrderFood orderFood1 : orderFood) {
             List<OrderUnit> unit = orderUnitRepository.findAllByOID(orderFood1.getId());
             orderUnit.addAll(unit);
             for (OrderUnit u : unit) {
                 String name = productRepository.findById(u.getId()).get().getName();
-                proName.add(name);
+                productName.add(name);
             }
         }
-        model.addAttribute("proName", proName);
+        model.addAttribute("proName", productName);
         model.addAttribute("orderFood", orderFood);
         model.addAttribute("orderUnit", orderUnit);
+
     }
 
 }

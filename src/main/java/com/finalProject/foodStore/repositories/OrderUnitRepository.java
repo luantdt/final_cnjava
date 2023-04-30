@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface OrderUnitRepository extends JpaRepository<OrderUnit, Integer> {
 
-    @Query("SELECT ou FROM orderunit ou WHERE ou.id = :OID")
+    @Query("SELECT ou FROM orderunit ou WHERE ou.orderId = :OID")
     List<OrderUnit> findAllByOID(@Param("OID")int OID);
 }

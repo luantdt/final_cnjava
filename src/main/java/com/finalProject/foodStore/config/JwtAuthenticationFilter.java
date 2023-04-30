@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		
 		if (cookie == null) {
 			if (request.getServletPath().contains("/test") || request.getServletPath().contains("/order")
-		|| request.getServletPath().contains("/cart/pay")) {
+		|| request.getServletPath().contains("/cart/pay") || request.getServletPath().contains("/cart")) {
 				response.sendRedirect(request.getContextPath() + "/auth/login");
 				return;
 			} else {
