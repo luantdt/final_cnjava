@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 @Controller
 @RequestMapping("")
 public class ProductController {
@@ -91,8 +92,8 @@ public class ProductController {
 
     @GetMapping("/find-product/{id}")
     public String findProductById(@PathVariable("id") Integer id, Model model){
-        Food food = productService.getProductById(id);
-        Integer categoryId = food.getCategory().getId();
+        Optional<Food> food = productService.getProductById(id);
+        Integer categoryId = food.get().getCategory().getId();
         List<Food> foods = productService.getRelatedProducts(categoryId);
         model.addAttribute("title", "Manage Product");
         model.addAttribute("product", food);
@@ -103,7 +104,7 @@ public class ProductController {
     @GetMapping("/products-in-category/{id}")
     public String getProductsInCategory(@PathVariable("id") Integer categoryId, Model model){
         List<CategoryDto> categoryDtoList = categoryService.getCategoryAndProduct();
-        Category category = categoryService.findById(categoryId);
+        Category category = categoryService.findById(categoryId).get();
         List<Food> products = productService.getProductsInCategory(categoryId);
         model.addAttribute("categories", categoryDtoList);
         model.addAttribute("category", category);

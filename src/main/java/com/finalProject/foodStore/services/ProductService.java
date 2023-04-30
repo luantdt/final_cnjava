@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -29,15 +30,15 @@ public class ProductService {
         Page<Food> products = productRepository.searchProducts(keyword, pageable);
         return  products;
     }
-
+    
     public List<Food> getAllProducts(){
         return productRepository.getAllProducts();
     }
 
     public List<Food> getLimitProducts(){ return productRepository.getLimitProducts();}
 
-    public Food getProductById(Integer id){
-        return productRepository.getById(id);
+    public Optional<Food> getProductById(Integer id){
+        return productRepository.findById(id);
     }
 
     public List<Food> getRelatedProducts(Integer categoryId){
@@ -47,4 +48,9 @@ public class ProductService {
     public List<Food> getProductsInCategory(Integer categoryId){
         return productRepository.getProductsInCategory(categoryId);
     }
+    
+    public List<Food> findAll() {
+    	return productRepository.findAll();
+    }
+    
 }

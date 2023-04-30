@@ -81,7 +81,6 @@ function handleChangeUserSubmit(event) {
 	};
 
 	if (confirm("Are you sure?")) {
-		console.log(data);
 		fetch('/auth/update', {
 			method: 'POST',
 			headers: {
@@ -103,7 +102,128 @@ function handleChangeUserSubmit(event) {
 	}
 }
 
+function handleChangeFoodSubmit(e) {
+	e.preventDefault();
+
+	const form = document.getElementById("update-food-form");
+	const msgBox = document.getElementById("err-msg");
+	const file = document.getElementById("fileInput").files[0];
+	const formData = new FormData();
+	formData.append("id", form.elements.id.value);
+	formData.append("name", form.elements.name.value);
+	formData.append("description", form.elements.description.value);
+	formData.append("quantity", form.elements.quantity.value);
+	formData.append("price", form.elements.price.value);
+	formData.append("status", form.elements.status.value == "1" ? true : false);
+
+	if (form.elements.category.value != "NO") {
+		formData.append("categoryName", form.elements.category.value);
+	}
+
+	if (file != undefined) {
+		formData.append("file", file);
+	}
+
+	if (confirm("Are you sure?")) {
+		fetch('/admin/food/update', {
+			method: 'POST',
+			body: formData
+		})
+			.then(res => {
+				if (res.status == 200) {
+					alert("Update food has successfull");
+					window.location.href = "/admin/food";
+				}
+				return res.json();
+			})
+			.then(data => {
+				msgBox.innerHTML = data.data;
+			})
+			.catch(error => console.error(error));
+	}
+}
+
+function previewImage(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+
+		reader.onload = function(e) {
+			$('#preview').attr('src', e.target.result);
+		}
+
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+
+function handleAddFoodSubmit(e) {
+	e.preventDefault();
+
+	const form = document.getElementById("add-food-form");
+	const msgBox = document.getElementById("err-msg");
+	const file = document.getElementById("fileInput").files[0];
+
+	const formData = new FormData();
+
+	formData.append("name", form.elements.name.value);
+	formData.append("description", form.elements.description.value);
+	formData.append("quantity", form.elements.quantity.value);
+	formData.append("price", form.elements.price.value);
+	formData.append("status", form.elements.status.value == "1" ? true : false);
+
+	if (form.elements.category.value != "NO") {
+		formData.append("categoryName", form.elements.category.value);
+	}
+
+	if (file != undefined) {
+		formData.append("file", file);
+	}
+
+	if (confirm("Are you sure?")) {
+		fetch('/admin/food/add', {
+			method: 'POST',
+			body: formData
+		})
+			.then(res => {
+				if (res.status == 200) {
+					alert("Add food has successfull");
+					window.location.href = "/admin/food";
+				}
+				return res.json();
+			})
+			.then(data => {
+				msgBox.innerHTML = data.data || data.message;
+			})
+			.catch(error => console.error(error));
+	}
+}
+
+function handleDeleteFoodForm(e) {
+	let ok = false;
+	if (confirm("Are you sure to delete item?")) {
+		fetch('/admin/food/' + e.id, {
+			method: 'DELETE'
+		})
+			.then(res => {
+				if (res.status == 200) {
+					alert("Delete food has successfull");
+					location.reload();
+					ok = true;
+				}
+				return res.json();
+			})
+			.then(data => {
+				if (!ok) {
+					alert(data.data || data.message);
+				}
+			})
+			.catch(error => console.error(error));
+	}
+
+}
+
 
 document.getElementById("login-form")?.addEventListener("submit", submitForm);
 document.getElementById("register-form")?.addEventListener("submit", registerForm);
 document.getElementById("update-user-form")?.addEventListener("submit", handleChangeUserSubmit);
+document.getElementById("update-food-form")?.addEventListener("submit", handleChangeFoodSubmit);
+document.getElementById("add-food-form")?.addEventListener("submit", handleAddFoodSubmit);

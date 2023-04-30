@@ -24,7 +24,7 @@ public class SecurityConfiguration {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http.cors().disable().csrf().disable().authorizeHttpRequests()
+		http.csrf().disable().authorizeHttpRequests()
 		/*
 		 * .requestMatchers("/", "/css/**", "/js/**", "/img/**", "/bootstrap/**",
 		 * "/webfonts/**", "/_admin/**") .permitAll() .requestMatchers("/auth/register",
@@ -32,14 +32,11 @@ public class SecurityConfiguration {
 		 * .permitAll().requestMatchers("/image",
 		 * "/image/**").permitAll().anyRequest().authenticated().and()
 		 */
-
 		.requestMatchers("/test", "/order", "/cart","/cart/**")
 		.authenticated().anyRequest().permitAll().and().sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		.authenticationProvider(authenticationProvider)
-		.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).logout()
-		.logoutUrl("/auth/logout").addLogoutHandler(logoutHandler)
-		.logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
+		.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 		
 		return http.build();
 	}

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -124,11 +125,11 @@ public class AuthenticationService {
 		if (cookie == null) {
 			return null;
 		}
-		
+
 		final String userEmail;
 		final String jwt = cookie.getValue();
 		userEmail = jwtService.extractUsername(jwt);
-		
+
 		if (userEmail != null && !jwtService.isTokenExpired(jwt)) {
 			Optional<User> user = repository.findByEmail(userEmail);
 			if (user.isPresent()) {
@@ -138,6 +139,58 @@ public class AuthenticationService {
 		} else {
 			return null;
 		}
+	}
+
+	public void saveTokenIntoCookie(HttpServletResponse response, String accessToken, String refreshToken) {
+		Cookie access_cookie = new Cookie("access_token", accessToken);
+		Cookie refresh_coookie = new Cookie("refresh_token", refreshToken);
+
+		access_cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
+		access_cookie.setPath("/");
+
+		refresh_coookie.setMaxAge(7 * 24 * 60 * 60);
+		refresh_coookie.setPath("/");
+
+		response.addCookie(access_cookie);
+		response.addCookie(refresh_coookie);
+	}
+
+	public boolean isAdmin(Authentication authentication) {
+		return authentication.getAuthorities().stream()
+				.anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+	}
+	
+	public void logout(HttpServletRequest request, HttpServletResponse response) {
+		Cookie cookie = WebUtils.getCookie(request, "access_token");
+
+		if (cookie != null) {
+			final String userEmail;
+			final String jwt = cookie.getValue();
+			userEmail = jwtService.extractUsername(jwt);
+
+			if (userEmail != null) {
+				Optional<User> user = repository.findByEmail(userEmail);
+				if (user.isPresent()) {
+
+					revokeAllUserTokens(user.get());
+				}
+				
+			}
+		}
+
+		
+		
+		Cookie access = new Cookie("access_token", null);
+		Cookie refresh = new Cookie("refresh_token", null);
+		
+		refresh.setMaxAge(0);
+		access.setMaxAge(0);
+		
+		access.setPath("/");
+		refresh.setPath("/");
+		
+		response.addCookie(refresh);
+		response.addCookie(access);
 	}
 
 	private void saveUserToken(User user, String jwtToken) {
@@ -177,19 +230,5 @@ public class AuthenticationService {
 				new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
 			}
 		}
-	}
-
-	public void saveTokenIntoCookie(HttpServletResponse response, String accessToken, String refreshToken) {
-		Cookie access_cookie = new Cookie("access_token", accessToken);
-		Cookie refresh_coookie = new Cookie("refresh_token", refreshToken);
-
-		access_cookie.setMaxAge(7 * 24 * 60 * 60); // expires in 7 days
-		access_cookie.setPath("/");
-
-		refresh_coookie.setMaxAge(7 * 24 * 60 * 60);
-		refresh_coookie.setPath("/");
-
-		response.addCookie(access_cookie);
-		response.addCookie(refresh_coookie);
 	}
 }

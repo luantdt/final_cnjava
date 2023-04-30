@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -35,8 +36,7 @@ public class Food {
 	private int id;
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "categoryId")
-	@NotNull(message = "category is not null")
+	@JoinColumn(name = "categoryId", nullable = true)
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@JsonIgnore
@@ -47,15 +47,13 @@ public class Food {
 	private String name;
 
 	@NotNull(message = "quantity field cannot be left null")
-	@Min(value = 1, message = "quantity must more than one")
+	@Min(value = 0, message = "quantity must more than zero")
 	private float quantity;
 
 	@NotEmpty(message = "description of food is not empty")
 	@NotNull(message = "description of food is not null")
 	private String description;
 
-	@NotEmpty(message = "image of food is not empty")
-	@NotNull(message = "image of food is not null")
 	private String image;
 	
 	private Boolean isSale = true;
@@ -64,13 +62,13 @@ public class Food {
 	private float discountPrice;
 	
 	@NotNull(message = "quantity field cannot be left null")
-	@Min(value = 1, message = "quantity must more than one")
-	private float price;
+	@Min(value = 0, message = "quantity must more than zero")
+	private float price; 
 	
 	@Column(nullable = true)
 	private Date beginSale;
 	
-	private boolean status = true;
+	private boolean status;
 	
 	@Column(nullable = true)
 	private Date endSale;

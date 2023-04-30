@@ -31,6 +31,12 @@ public class AuthenticationController {
 	@Autowired
 	private final AuthenticationService service;
 
+	@GetMapping("/logout")
+	public String LogoutUser (HttpServletRequest request, HttpServletResponse response) {
+		service.logout(request, response);
+		return "redirect:/auth/login";
+	}
+	
 	@PostMapping("/register")
 	public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequest request,
 			HttpServletResponse response) {
@@ -59,13 +65,15 @@ public class AuthenticationController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("FALSE", "Email has existed", null));
 		}
 	}
+	
+	
 
 	@GetMapping("/login")
 	public String getLoginPage() {
 		return "admin/login";
 	}
 
-	@GetMapping("register")
+	@GetMapping("/register")
 	public String getRegisterPage() {
 		return "admin/register";
 	}

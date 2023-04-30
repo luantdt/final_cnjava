@@ -1,5 +1,6 @@
 package com.finalProject.foodStore.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -40,7 +41,7 @@ public class ImageStorageService implements IStorageService {
 	@Override
 	public String storeFile(MultipartFile file) {
 		try {
-			System.out.println("haha");
+
 			if (file.isEmpty()) {
 				throw new RuntimeException("Failed to store empty file.");
 			}
@@ -102,8 +103,20 @@ public class ImageStorageService implements IStorageService {
 	}
 
 	@Override
-	public void deleteFile() {
+	public boolean deleteFile(String fileName) {
+		try {
+			Path filePath = storageFolder.resolve(fileName);
+			File fileToDelete = filePath.toFile();
 
+			if (fileToDelete.delete()) {
+				return true;
+			} else {
+				throw new RuntimeException("Failed to delete file: " + fileName);
+			}
+
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to delete file: " + fileName, e);
+		}
 	}
 
 }

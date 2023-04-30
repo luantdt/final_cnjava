@@ -61,11 +61,6 @@ public class CartService {
         newCart.setQuantity(1);
         cartRepository.save(newCart);
 
-
-
-
-
-
     }
 
     public void deleteById(Integer id) {
