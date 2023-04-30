@@ -69,12 +69,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 					isAdmin = true;
 				}
 			}
-			
+
 			if (request.getServletPath().contains("/admin") && isAdmin == false) {
 				response.sendRedirect(request.getContextPath() + "/");
 				return;
 			}
-			
+
 			var isTokenValid = tokenRepository.findByToken(jwt).map(t -> !t.isExpired() && !t.isRevoked())
 					.orElse(false);
 			if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {

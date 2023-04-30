@@ -66,15 +66,16 @@ public class OrderService {
 	public void getAllAndModel(Model model, HttpServletRequest httpServletRequest) {
 
 		User user = authenticationService.AuthInfor(httpServletRequest);
+
 		List<OrderFood> orderFood = orderFoodRepository.findAllByUser(user);
-		
-		List<OrderUnit> orderUnit = new ArrayList<>();
+
+		List<OrderUnit> orderUnit = new ArrayList<OrderUnit>();
 		List<String> productName = new ArrayList<String>();
 		for (OrderFood orderFood1 : orderFood) {
 			List<OrderUnit> unit = orderUnitRepository.findAllByOID(orderFood1.getId());
 			orderUnit.addAll(unit);
 			for (OrderUnit u : unit) {
-				String name = productRepository.findById(u.getId()).get().getName();
+				String name = productRepository.findById(u.getFoodId()).get().getName();
 				productName.add(name);
 			}
 		}

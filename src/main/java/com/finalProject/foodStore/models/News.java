@@ -44,5 +44,8 @@ public class News {
     @Column(name = "date", nullable = false, updatable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private Date date;
- 
+    
+    @NotEmpty(message = "shortDes of blog is not empty")
+	@NotNull(message = "shortDes of blog is not null")
+    private String shortdes;
 }

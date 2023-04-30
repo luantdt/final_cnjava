@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.finalProject.foodStore.models.OrderFood;
+import com.finalProject.foodStore.models.OrderUnit;
 import com.finalProject.foodStore.models.ResponseObject;
 import com.finalProject.foodStore.models.User;
 import com.finalProject.foodStore.repositories.OrderFoodRepository;
+import com.finalProject.foodStore.repositories.OrderUnitRepository;
 import com.finalProject.foodStore.repositories.UserRepository;
 import com.finalProject.foodStore.services.AuthenticationService;
 
@@ -36,13 +38,17 @@ public class TestController {
 	
 	@Autowired
 	private OrderFoodRepository orderFoodRepository;
+	@Autowired
+	private OrderUnitRepository orderUnitRepository;
+	
 	@GetMapping("")
 	public ResponseEntity<ResponseObject> getTestPage(HttpServletRequest req, HttpServletResponse res) {
 
 		User user = authService.AuthInfor(req);
 
 		List<OrderFood> orderFood = orderFoodRepository.findAllByUser(user);
-		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Login has successful", orderFood));
+		List<OrderUnit> unit = orderUnitRepository.findAllByOID(orderFood.get(0).getId());
+		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Login has successful", unit));
 	}
 
 	@GetMapping("/rest/{id}")
