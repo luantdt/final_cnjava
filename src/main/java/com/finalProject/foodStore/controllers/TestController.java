@@ -1,5 +1,6 @@
 package com.finalProject.foodStore.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.finalProject.foodStore.models.OrderFood;
 import com.finalProject.foodStore.models.ResponseObject;
 import com.finalProject.foodStore.models.User;
+import com.finalProject.foodStore.repositories.OrderFoodRepository;
 import com.finalProject.foodStore.repositories.UserRepository;
 import com.finalProject.foodStore.services.AuthenticationService;
 
@@ -27,18 +30,23 @@ import jakarta.servlet.http.HttpServletResponse;
 public class TestController {
 	@Autowired
 	private AuthenticationService authService;
-	
+
 	@Autowired
 	private UserRepository userRepo;
 	
+	@Autowired
+	private OrderFoodRepository orderFoodRepository;
 	@GetMapping("")
 	public ResponseEntity<ResponseObject> getTestPage(HttpServletRequest req, HttpServletResponse res) {
-		authService.logout(req, res);
-		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Login has successful", null));
+
+		User user = authService.AuthInfor(req);
+
+		List<OrderFood> orderFood = orderFoodRepository.findAllByUser(user);
+		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Login has successful", orderFood));
 	}
-	
+
 	@GetMapping("/rest/{id}")
-	public ResponseEntity<ResponseObject> getUser(@PathVariable int id){
+	public ResponseEntity<ResponseObject> getUser(@PathVariable int id) {
 		Optional<User> user = userRepo.findById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Login has successful", user.get()));
 	}

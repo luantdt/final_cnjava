@@ -25,6 +25,8 @@ public class OrderFood {
 	private float shippingFee = 20;
 	
 	private String status;
+	
+	@Column(nullable = true)
 	private String note;
 	private float total;
 
