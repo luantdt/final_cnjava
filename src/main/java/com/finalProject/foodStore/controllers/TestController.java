@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,10 +17,13 @@ import com.finalProject.foodStore.models.User;
 import com.finalProject.foodStore.repositories.UserRepository;
 import com.finalProject.foodStore.services.AuthenticationService;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(path = "/test")
+@PreAuthorize("hasRole('USER')")
 public class TestController {
 	@Autowired
 	private AuthenticationService authService;
@@ -27,13 +32,13 @@ public class TestController {
 	private UserRepository userRepo;
 	
 	@GetMapping("")
-	public ResponseEntity<ResponseObject> getTestPage(HttpServletRequest req) {
-		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Login has successful", authService.AuthInfor(req)));
+	public ResponseEntity<ResponseObject> getTestPage(HttpServletRequest req, HttpServletResponse res) {
+		authService.logout(req, res);
+		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Login has successful", null));
 	}
 	
 	@GetMapping("/rest/{id}")
 	public ResponseEntity<ResponseObject> getUser(@PathVariable int id){
-		System.out.println(id);
 		Optional<User> user = userRepo.findById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Login has successful", user.get()));
 	}

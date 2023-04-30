@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{admin/fragments/main.html :: html_head}">
+</head>
+
+<body id="page-top">
+
+	<!-- Page Wrapper -->
+	<div id="wrapper">
+
+		<!-- Sidebar -->
+		<ul th:replace="~{admin/fragments/navBar.html :: navBar}">
+		</ul>
+		<!-- End of Sidebar -->
+
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+
+			<!-- Main Content -->
+			<div id="content">
+
+				<!-- Topbar -->
+				<nav th:replace="~{admin/fragments/header.html :: header_admin}">
+
+				</nav>
+				<!-- End of Topbar -->
+
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+
+					<!-- Page Heading -->
+					<h1 class="h3 mb-2 text-gray-800">FOOD MANAGEMENT</h1>
+					<a href="/admin/food">
+						<h6 class="h6 mb-2 text-primary-600">
+							<i class="bi bi-chevron-left"></i> Go back to food management
+							page
+						</h6>
+					</a>
+					<!-- DataTales Example -->
+					<div class="card shadow mb-4 mt-3">
+						<div class="card-header py-3">
+							<h6 class="m-0 font-weight-bold text-primary">Edit food</h6>
+						</div>
+						<div class="card-body row">
+							<div class="col-8">
+								<form id="update-food-form" class="user pl-3 pr-3" action="/"
+									method="post" enctype="multipart/form-data">
+									<div class="form-group">
+										<label class="h6">Name</label> <input type="text"
+											th:value="${food.name}"
+											class="form-control form-control-user" name="name"
+											id="exampleInputEmail" placeholder="Name of food">
+									</div>
+									<div class="form-group">
+										<label class="h6">Description</label> <input type="text"
+											th:value="${food.description}"
+											class="form-control form-control-user" name="description"
+											placeholder="Description">
+									</div>
+
+									<div class="form-group row">
+										<div class="col-sm-6 mb-3 mb-sm-0">
+											<label class="h6">Quantity</label> <input type="text"
+												class="form-control form-control-user"
+												th:value="${food.quantity}" name="quantity"
+												id="exampleFirstName" placeholder="Quantity">
+										</div>
+										<div class="col-sm-6">
+											<label class="h6">Price</label> <input type="text"
+												class="form-control form-control-user"
+												th:value="${food.price}" name="price" id="exampleLastName"
+												placeholder="Price">
+										</div>
+									</div>
+
+									<div class="form-group row">
+
+										<div class="col-sm-6 mb-3 mb-sm-0">
+											<label class="h6">Status</label> <select class="form-control"
+												name="status" aria-label="Default select example">
+												<option value="1" th:selected="${food.status}">Active</option>
+												<option value="0" th:selected="${!food.status}">Inactive</option>
+											</select>
+										</div>
+										<div class="col-sm-6">
+											<label class="h6">Category</label>
+											<div class="input-group w-100">
+												<div class="input-group-prepend">
+													<span class="input-group-text w-100" id="thisCate"
+														th:text="${food.category != null? food.category.name : 'No category'}"></span>
+												</div>
+
+												<select class="form-control" name="category">
+													<option value="NO">Select category for the food</option>
+													<option th:if="${not #lists.isEmpty(cates)}"
+														th:each="cate : ${cates}" th:value="${cate.name}"
+														th:text="${cate.name}"></option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<input name="id" style="display: none" th:value="${food.id}"><input
+										class="btn btn-primary btn-user btn-block"
+										value="Update food" type="submit">
+
+									<div class="text-danger text-center mt-2" id="err-msg"></div>
+								</form>
+							</div>
+							<div class="col-4">
+								<div>
+									<p>
+									<h4>Current image</h4>
+									<img th:src="@{/image/{imgPro}(imgPro=${food.image})}" id="preview"
+										style="width: 100%">
+									</p>
+								</div>
+
+								<div>
+									<p>
+										<h4>Change image</h4>
+									</p>
+
+									<div class="input-group mb-3">
+										<div class="input-group-prepend">
+											<span class="input-group-text" id="inputGroupFileAddon01">Upload image</span>
+										</div>
+										<div class="custom-file">
+											<input type="file" class="custom-file-input"
+												id="fileInput" onchange="previewImage(this)"
+												aria-describedby="inputGroupFileAddon01"> <label
+												class="custom-file-label" for="fileInput">Choose
+												file</label>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- /.container-fluid -->
+
+			</div>
+			<!-- End of Main Content -->
+
+			<!-- Footer -->
+			<footer th:replace="~{admin/fragments/footer.html :: footer}">
+			</footer>
+			<!-- End of Footer -->
+
+		</div>
+		<!-- End of Content Wrapper -->
+
+	</div>
+	<!-- End of Page Wrapper -->
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Select "Logout" below if you are ready
+					to end your current session.</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button"
+						data-dismiss="modal">Cancel</button>
+					<a class="btn btn-primary" href="login.html">Logout</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="~{admin/fragments/main.html :: index_script}"></div>
+</body>
+
+</html>

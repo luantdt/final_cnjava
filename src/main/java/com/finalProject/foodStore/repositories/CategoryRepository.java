@@ -16,5 +16,5 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Query("select new com.finalProject.foodStore.dto.CategoryDto(c.id, c.name) from category c inner  join food p on p.category.id = c.id group by c.id")
     List<CategoryDto> getCategoryAndProduct();
 
-
+    Category findByName(String name);
 }

@@ -12,5 +12,5 @@ public interface IStorageService {
 
 	public byte[] readFileContent(String fileName);
 
-	public void deleteFile();
+	public boolean deleteFile(String fileName);
 }

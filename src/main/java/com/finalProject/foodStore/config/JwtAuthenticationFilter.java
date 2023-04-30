@@ -38,7 +38,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
 			@NonNull FilterChain filterChain) throws ServletException, IOException {
-
 		if (request.getServletPath().contains("/auth")) {
 			filterChain.doFilter(request, response);
 			return;
@@ -47,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		Cookie cookie = WebUtils.getCookie(request, "access_token");
 		
 		if (cookie == null) {
-			if (request.getServletPath().contains("/test") ) {
+			if (request.getServletPath().contains("/test")) {
 				response.sendRedirect(request.getContextPath() + "/auth/login");
 				return;
 			} else {
