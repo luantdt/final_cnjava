@@ -20,8 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.finalProject.foodStore.models.Cart;
 import com.finalProject.foodStore.models.Category;
 import com.finalProject.foodStore.models.Food;
+import com.finalProject.foodStore.models.OrderUnit;
 import com.finalProject.foodStore.models.ResponseObject;
 import com.finalProject.foodStore.repositories.CartRepository;
+import com.finalProject.foodStore.repositories.OrderUnitRepository;
 import com.finalProject.foodStore.repositories.ProductRepository;
 import com.finalProject.foodStore.services.CategoryService;
 import com.finalProject.foodStore.services.ImageStorageService;
@@ -48,6 +50,8 @@ public class FoodManagementController {
 	@Autowired
 	private	CartRepository cartRepo;
 	
+	@Autowired
+	private OrderUnitRepository orderUnitRepo;
 	/*
 	 * @Autowired private OrderUnitRepository orderUnitRepo
 	 */
@@ -83,7 +87,11 @@ public class FoodManagementController {
 
 		try {
 			if (file != null) {
-				imgStorageService.deleteFile(oldFood.getImage());
+				try {
+					imgStorageService.deleteFile(oldFood.getImage());
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 				String generatedFileName = imgStorageService.storeFile(file);
 				oldFood.setImage(generatedFileName);
 			}
@@ -162,10 +170,11 @@ public class FoodManagementController {
 		}
 		
 		List<Cart> cart = cartRepo.findAllByUID(id);
-		if (cart.size() > 0) {
+		List<OrderUnit> orderUnit = orderUnitRepo.findAllByFoodId(id);
+		if (cart.size() > 0 || orderUnit.size() > 0) {
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(new ResponseObject("FALSE","The data cannot be deleted because the data is being used by the cart object and the order product", null));
 		}
-		
+
 		productRepo.deleteById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK","Delete food has successful", null));
 	}

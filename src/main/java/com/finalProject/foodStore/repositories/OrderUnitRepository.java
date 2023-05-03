@@ -11,4 +11,6 @@ public interface OrderUnitRepository extends JpaRepository<OrderUnit, Integer> {
 
     @Query("SELECT ou FROM orderunit ou WHERE ou.orderId = :OID")
     List<OrderUnit> findAllByOID(@Param("OID")int OID);
+    
+    List<OrderUnit> findAllByFoodId(int foodId);
 }

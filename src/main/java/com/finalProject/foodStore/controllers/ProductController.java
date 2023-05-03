@@ -120,11 +120,11 @@ public class ProductController {
 
     @GetMapping("/find-product/{id}")
     public String findProductById(@PathVariable("id") Integer id, Model model){
-        Optional<Food> food = productService.getProductById(id);
+        Optional<Food> food	 = productService.getProductById(id);
         Integer categoryId = food.get().getCategory().getId();
         List<Food> foods = productService.getRelatedProducts(categoryId);
         model.addAttribute("title", "Manage Product");
-        model.addAttribute("product", food);
+        model.addAttribute("product", food.get());
         model.addAttribute("products", foods);
         return "client/product-detail";
     }

@@ -35,7 +35,7 @@ public class Food {
 	@JsonIgnore
 	private int id;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "categoryId", nullable = true)
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
