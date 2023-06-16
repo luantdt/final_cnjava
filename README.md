@@ -1,9 +1,16 @@
 # Final CNJAVA 1
 
-+ 51900815 - Trần Vũ Luân
++ 51900815 - Trần Vũ Luân (nhóm trưởng)
 + 51900021 - Nguyễn Chánh Đại
 + 51900103 - Tô Tấn Khải
 + 51900067 - Nguyễn Trung Hậu
+
+## Thông tin dự án
+Website bán thực phẩm và quản lý sản phẩm
+
+## Các công nghệ chính 
+- Spring framework
+- JWT token
 
 ## Link information
 - Database  diagram: https://drive.google.com/file/d/1Al24ELS48PnMa6pUMYEl0hQuiLGupVxo/view?usp=sharing
